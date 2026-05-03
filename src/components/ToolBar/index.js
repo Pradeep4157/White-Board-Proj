@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import classes from "./index.module.css";
 import cx from "classnames";
+import { useContext } from "react";
+import boardContext from "../../store/board-context.js";
 import {
   FaSlash,
   FaRegCircle,
@@ -14,7 +16,8 @@ import {
 } from "react-icons/fa";
 import { LuRectangleHorizontal } from "react-icons/lu";
 const Toolbar = () => {
-  const [activeToolItem, setActiveToolItem] = useState("LINE");
+  const { activeToolItem, handleToolItemClick } = useContext(boardContext);
+
   return (
     <div className={classes.container}>
       <div
@@ -22,7 +25,7 @@ const Toolbar = () => {
           [classes.active]: activeToolItem === "LINE",
         })}
         onClick={() => {
-          setActiveToolItem("LINE");
+          handleToolItemClick("LINE");
         }}
       >
         <FaSlash />
@@ -32,7 +35,7 @@ const Toolbar = () => {
           [classes.active]: activeToolItem === "RECTANGLE",
         })}
         onClick={() => {
-          setActiveToolItem("RECTANGLE");
+          handleToolItemClick("RECTANGLE");
         }}
       >
         <LuRectangleHorizontal />
