@@ -1,6 +1,8 @@
 import boardContext from "./board-context.js";
 import { useReducer } from "react";
 import { TOOL_ITEMS } from "../constants.js";
+import rough from "roughjs/bin/rough";
+const gen = rough.generator();
 const boardReducer = (state, action) => {
   switch (action.type) {
     case "CHANGE_TOOL":
@@ -10,6 +12,21 @@ const boardReducer = (state, action) => {
       };
     default:
       return state;
+    case "DRAW_DOWN":
+      const newElement = {
+        id: state.elements.length,
+        x1: action.payload.clientX,
+        y1: action.payload.clientY,
+        x2: action.payload.clientX,
+        y2: action.payload.clientY,
+        roughEle: gen.line(
+          action.payload.clientX,
+          action.payload.clientY,
+          action.payload.clientX,
+          action.payload.clientY,
+        ),
+      };
+      return { ...state, elements: [...state.elements, newElement] };
   }
 };
 const initialBoardState = {
@@ -23,8 +40,17 @@ const BoardProvider = ({ children }) => {
     initialBoardState,
   );
 
-  //   const [activeToolItem, setActiveToolItem] = useState(TOOL_ITEMS.LINE);
-  //   const [elements, setElements] = useState([]);
+  const boardMouseHandler = (event) => {
+    const { clientX, clientY } = event;
+
+    dispatchBoardAction({
+      type: "DRAW_DOWN",
+      payload: {
+        clientX,
+        clientY,
+      },
+    });
+  };
 
   const handleToolItemClick = (tool) => {
     dispatchBoardAction({
@@ -38,6 +64,8 @@ const BoardProvider = ({ children }) => {
   const BoardContextValue = {
     activeToolItem: boardState.activeToolItem,
     handleToolItemClick,
+    elements: boardState.elements,
+    boardMouseHandler,
   };
   return (
     <boardContext.Provider value={BoardContextValue}>
