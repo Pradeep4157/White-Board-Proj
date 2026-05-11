@@ -40,7 +40,7 @@ const BoardProvider = ({ children }) => {
     initialBoardState,
   );
 
-  const boardMouseHandler = (event) => {
+  const boardMouseDownHandler = (event) => {
     const { clientX, clientY } = event;
 
     dispatchBoardAction({
@@ -65,7 +65,7 @@ const BoardProvider = ({ children }) => {
     activeToolItem: boardState.activeToolItem,
     handleToolItemClick,
     elements: boardState.elements,
-    boardMouseHandler,
+    boardMouseDownHandler,
   };
   return (
     <boardContext.Provider value={BoardContextValue}>
