@@ -5,14 +5,13 @@ import rough from "roughjs/bin/rough";
 const gen = rough.generator();
 const boardReducer = (state, action) => {
   switch (action.type) {
-    case "CHANGE_TOOL":
+    case "CHANGE_TOOL": {
       return {
         ...state,
         activeToolItem: action.payload.tool,
       };
-    default:
-      return state;
-    case "DRAW_DOWN":
+    }
+    case "DRAW_DOWN": {
       const newElement = {
         id: state.elements.length,
         x1: action.payload.clientX,
@@ -26,7 +25,31 @@ const boardReducer = (state, action) => {
           action.payload.clientY,
         ),
       };
+
       return { ...state, elements: [...state.elements, newElement] };
+    }
+    case "DRAW_MOVE": {
+      if (state.elements.length === 0) {
+        return state;
+      }
+      const { clientX, clientY } = action.payload;
+      const newElements = [...state.elements];
+      const index = state.elements.length - 1;
+      newElements[index].x2 = clientX;
+      newElements[index].y2 = clientY;
+      newElements[index].roughEle = gen.line(
+        newElements[index].x1,
+        newElements[index].y1,
+        clientX,
+        clientY,
+      );
+      return {
+        ...state,
+        elements: newElements,
+      };
+    }
+    default:
+      return state;
   }
 };
 const initialBoardState = {
@@ -51,8 +74,18 @@ const BoardProvider = ({ children }) => {
       },
     });
   };
+  const boardMouseMoveHandler = (event) => {
+    const { clientX, clientY } = event;
+    dispatchBoardAction({
+      type: "DRAW_MOVE",
+      payload: {
+        clientX,
+        clientY,
+      },
+    });
+  };
 
-  const handleToolItemClick = (tool) => {
+  const changeToolHandler = (tool) => {
     dispatchBoardAction({
       type: "CHANGE_TOOL",
       payload: {
@@ -63,9 +96,10 @@ const BoardProvider = ({ children }) => {
 
   const BoardContextValue = {
     activeToolItem: boardState.activeToolItem,
-    handleToolItemClick,
+    changeToolHandler,
     elements: boardState.elements,
     boardMouseDownHandler,
+    boardMouseMoveHandler,
   };
   return (
     <boardContext.Provider value={BoardContextValue}>

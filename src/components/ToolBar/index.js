@@ -16,7 +16,7 @@ import {
 } from "react-icons/fa";
 import { LuRectangleHorizontal } from "react-icons/lu";
 const Toolbar = () => {
-  const { activeToolItem, handleToolItemClick } = useContext(boardContext);
+  const { activeToolItem, changeToolHandler } = useContext(boardContext);
 
   return (
     <div className={classes.container}>
@@ -25,7 +25,7 @@ const Toolbar = () => {
           [classes.active]: activeToolItem === "LINE",
         })}
         onClick={() => {
-          handleToolItemClick("LINE");
+          changeToolHandler("LINE");
         }}
       >
         <FaSlash />
@@ -35,7 +35,7 @@ const Toolbar = () => {
           [classes.active]: activeToolItem === "RECTANGLE",
         })}
         onClick={() => {
-          handleToolItemClick("RECTANGLE");
+          changeToolHandler("RECTANGLE");
         }}
       >
         <LuRectangleHorizontal />

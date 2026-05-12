@@ -3,7 +3,8 @@ import rough from "roughjs";
 import boardContext from "../../store/board-context";
 function Board() {
   const canvasRef = useRef();
-  const { elements, boardMouseDownHandler } = useContext(boardContext);
+  const { elements, boardMouseDownHandler, boardMouseMoveHandler } =
+    useContext(boardContext);
   useEffect(() => {
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
@@ -23,9 +24,18 @@ function Board() {
     context.fillStyle = "red";
     context.fillRect(0, 0, 100, 100);
   });
-  const handleBrowseMouseDown = (event) => {
+  const handleMouseDown = (event) => {
     boardMouseDownHandler(event);
   };
-  return <canvas ref={canvasRef} onMouseDown={handleBrowseMouseDown}></canvas>;
+  const handleMouseMove = (event) => {
+    boardMouseMoveHandler(event);
+  };
+  return (
+    <canvas
+      ref={canvasRef}
+      onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
+    ></canvas>
+  );
 }
 export default Board;

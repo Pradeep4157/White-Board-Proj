@@ -3,6 +3,7 @@ const boardContext = createContext({
   activeToolItem: "",
   elements: [],
   boardMouseDownHandler: () => {},
-  handleToolItemClick: () => {},
+  changeToolHandler: () => {},
+  boardMouseMoveHandler: () => {},
 });
 export default boardContext;
