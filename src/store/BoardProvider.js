@@ -1,6 +1,6 @@
 import boardContext from "./board-context.js";
 import { useReducer } from "react";
-import { TOOL_ITEMS } from "../constants.js";
+import { TOOL_ITEMS, TOOL_ACTION_TYPES } from "../constants.js";
 import rough from "roughjs/bin/rough";
 const gen = rough.generator();
 const boardReducer = (state, action) => {
@@ -8,6 +8,7 @@ const boardReducer = (state, action) => {
     case "CHANGE_TOOL": {
       return {
         ...state,
+        toolActionType: TOOL_ACTION_TYPES.DRAWING,
         activeToolItem: action.payload.tool,
       };
     }
@@ -26,7 +27,11 @@ const boardReducer = (state, action) => {
         ),
       };
 
-      return { ...state, elements: [...state.elements, newElement] };
+      return {
+        ...state,
+        toolActionType: TOOL_ACTION_TYPES.DRAWING,
+        elements: [...state.elements, newElement],
+      };
     }
     case "DRAW_MOVE": {
       if (state.elements.length === 0) {
@@ -54,6 +59,7 @@ const boardReducer = (state, action) => {
 };
 const initialBoardState = {
   activeToolItem: TOOL_ITEMS.LINE,
+  toolActionType: TOOL_ACTION_TYPES.NONE,
   elements: [],
 };
 
@@ -100,6 +106,8 @@ const BoardProvider = ({ children }) => {
     elements: boardState.elements,
     boardMouseDownHandler,
     boardMouseMoveHandler,
+    boardMouseUpHandler,
+    toolActionType: boardState.toolActionType,
   };
   return (
     <boardContext.Provider value={BoardContextValue}>
