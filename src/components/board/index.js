@@ -8,6 +8,7 @@ function Board() {
     elements,
     boardMouseDownHandler,
     boardMouseMoveHandler,
+    boardMouseUpHandler,
     toolActionType,
   } = useContext(boardContext);
   useEffect(() => {
@@ -36,11 +37,15 @@ function Board() {
     if (toolActionType === TOOL_ACTION_TYPES.DRAWING)
       boardMouseMoveHandler(event);
   };
+  const handleMouseUp = () => {
+    boardMouseUpHandler();
+  };
   return (
     <canvas
       ref={canvasRef}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
     ></canvas>
   );
 }

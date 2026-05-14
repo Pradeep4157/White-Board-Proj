@@ -33,6 +33,12 @@ const boardReducer = (state, action) => {
         elements: [...state.elements, newElement],
       };
     }
+    case "DRAW_UP": {
+      return {
+        ...state,
+        toolActionType: TOOL_ACTION_TYPES.NONE,
+      };
+    }
     case "DRAW_MOVE": {
       if (state.elements.length === 0) {
         return state;
@@ -78,6 +84,11 @@ const BoardProvider = ({ children }) => {
         clientX,
         clientY,
       },
+    });
+  };
+  const boardMouseUpHandler = () => {
+    dispatchBoardAction({
+      type: "DRAW_UP",
     });
   };
   const boardMouseMoveHandler = (event) => {
