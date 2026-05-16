@@ -1,8 +1,8 @@
 import boardContext from "./board-context.js";
 import { useReducer } from "react";
 import { TOOL_ITEMS, TOOL_ACTION_TYPES } from "../constants.js";
-import rough from "roughjs/bin/rough";
-const gen = rough.generator();
+import { createRoughElement } from "../utils/elements.js";
+
 const boardReducer = (state, action) => {
   switch (action.type) {
     case "CHANGE_TOOL": {
@@ -13,20 +13,10 @@ const boardReducer = (state, action) => {
       };
     }
     case "DRAW_DOWN": {
-      const newElement = {
-        id: state.elements.length,
-        x1: action.payload.clientX,
-        y1: action.payload.clientY,
-        x2: action.payload.clientX,
-        y2: action.payload.clientY,
-        roughEle: gen.line(
-          action.payload.clientX,
-          action.payload.clientY,
-          action.payload.clientX,
-          action.payload.clientY,
-        ),
-      };
-
+      const { id, x1, y1, x2, y2 } = action.payload;
+      const newElement = createRoughElement(id, x1, y1, x2, y2, {
+        type: state.activeToolItem,
+      });
       return {
         ...state,
         toolActionType: TOOL_ACTION_TYPES.DRAWING,
@@ -48,11 +38,19 @@ const boardReducer = (state, action) => {
       const index = state.elements.length - 1;
       newElements[index].x2 = clientX;
       newElements[index].y2 = clientY;
-      newElements[index].roughEle = gen.line(
+      // newElements[index].roughEle = gen.line(
+      //   newElements[index].x1,
+      //   newElements[index].y1,
+      //   clientX,
+      //   clientY,
+      // );
+      newElements[index] = createRoughElement(
+        index,
         newElements[index].x1,
         newElements[index].y1,
         clientX,
         clientY,
+        { type: state.activeToolItem },
       );
       return {
         ...state,
@@ -81,8 +79,11 @@ const BoardProvider = ({ children }) => {
     dispatchBoardAction({
       type: "DRAW_DOWN",
       payload: {
-        clientX,
-        clientY,
+        id: Date.now(),
+        x1: clientX,
+        y1: clientY,
+        x2: clientX,
+        y2: clientY,
       },
     });
   };
