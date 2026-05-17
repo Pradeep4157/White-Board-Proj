@@ -1,4 +1,4 @@
-import { useRef, useEffect, useContext } from "react";
+import { useRef, useLayoutEffect, useContext } from "react";
 import { TOOL_ACTION_TYPES } from "../../constants.js";
 import rough from "roughjs";
 import boardContext from "../../store/board-context";
@@ -11,7 +11,7 @@ function Board() {
     boardMouseUpHandler,
     toolActionType,
   } = useContext(boardContext);
-  useEffect(() => {
+  useLayoutEffect(() => {
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
     canvas.width = window.innerWidth;
@@ -24,7 +24,7 @@ function Board() {
       context.clearRect(0, 0, canvas.width, canvas.height);
     };
   }, [elements]);
-  useEffect(() => {
+  useLayoutEffect(() => {
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
     context.fillStyle = "red";

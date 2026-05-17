@@ -8,7 +8,7 @@ const boardReducer = (state, action) => {
     case "CHANGE_TOOL": {
       return {
         ...state,
-        toolActionType: TOOL_ACTION_TYPES.DRAWING,
+        toolActionType: TOOL_ACTION_TYPES.NONE,
         activeToolItem: action.payload.tool,
       };
     }
@@ -30,7 +30,10 @@ const boardReducer = (state, action) => {
       };
     }
     case "DRAW_MOVE": {
-      if (state.elements.length === 0) {
+      if (
+        state.elements.length === 0 ||
+        state.toolActionType !== TOOL_ACTION_TYPES.DRAWING
+      ) {
         return state;
       }
       const { clientX, clientY } = action.payload;

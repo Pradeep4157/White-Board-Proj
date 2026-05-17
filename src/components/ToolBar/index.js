@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import classes from "./index.module.css";
 import cx from "classnames";
 import { useContext } from "react";
+import { TOOL_ITEMS } from "../../constants.js";
 import boardContext from "../../store/board-context.js";
 import {
   FaSlash,
@@ -39,6 +40,16 @@ const Toolbar = () => {
         }}
       >
         <LuRectangleHorizontal />
+      </div>
+      <div
+        className={cx(classes.toolItem, {
+          [classes.active]: activeToolItem === TOOL_ITEMS.CIRCLE,
+        })}
+        onClick={() => {
+          changeToolHandler("CIRCLE");
+        }}
+      >
+        <FaRegCircle />
       </div>
     </div>
   );
