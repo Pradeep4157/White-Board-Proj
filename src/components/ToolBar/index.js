@@ -51,6 +51,16 @@ const Toolbar = () => {
       >
         <FaRegCircle />
       </div>
+      <div
+        className={cx(classes.toolItem, {
+          [classes.active]: activeToolItem === TOOL_ITEMS.ARROW,
+        })}
+        onClick={() => {
+          changeToolHandler("ARROW");
+        }}
+      >
+        <FaArrowRight />
+      </div>
     </div>
   );
 };
