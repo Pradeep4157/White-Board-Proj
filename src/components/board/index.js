@@ -24,12 +24,12 @@ function Board() {
       context.clearRect(0, 0, canvas.width, canvas.height);
     };
   }, [elements]);
-  useLayoutEffect(() => {
-    const canvas = canvasRef.current;
-    const context = canvas.getContext("2d");
-    context.fillStyle = "red";
-    context.fillRect(0, 0, 100, 100);
-  });
+  // useLayoutEffect(() => {
+  //   const canvas = canvasRef.current;
+  //   const context = canvas.getContext("2d");
+  //   context.fillStyle = "red";
+  //   context.fillRect(0, 0, 100, 100);
+  // });
   const handleMouseDown = (event) => {
     boardMouseDownHandler(event);
   };
