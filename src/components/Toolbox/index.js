@@ -2,7 +2,12 @@
   08:10
 */
 import classes from "./index.module.css";
-import { COLORS, FILL_TOOL_TYPES } from "../../constants.js";
+import {
+  COLORS,
+  FILL_TOOL_TYPES,
+  SIZE_TOOL_TYPES,
+  TOOL_ITEMS,
+} from "../../constants.js";
 import { useContext } from "react";
 import boardContext from "../../store/board-context.js";
 import toolboxContext from "../../store/toolbox-context.js";
@@ -10,9 +15,11 @@ import cx from "classnames";
 
 const Toolbox = () => {
   const { activeToolItem } = useContext(boardContext);
-  const { toolboxState, changeStroke, changeFill } = useContext(toolboxContext);
+  const { toolboxState, changeStroke, changeFill, changeSize } =
+    useContext(toolboxContext);
   const strokeColor = toolboxState[activeToolItem]?.stroke;
   const fillColor = toolboxState[activeToolItem]?.fill;
+  const size = toolboxState[activeToolItem]?.size;
 
   return (
     <div className={classes.container}>
@@ -54,6 +61,21 @@ const Toolbox = () => {
           </div>
         </div>
       )}
+      <div>
+        {SIZE_TOOL_TYPES.includes(activeToolItem) && (
+          <div className={classes.selectOptionContainer}>
+            <div className={classes.toolBoxLabel}>Brush Size</div>
+            <input
+              type="range"
+              // min={activeToolItem === TOOL_ITEMS.TEXT ? 12 : 1}
+              // max={activeToolItem === TOOL_ITEMS.TEXT ? 64 : 10}
+              step={1}
+              value={size}
+              onChange={changeSize}
+            ></input>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

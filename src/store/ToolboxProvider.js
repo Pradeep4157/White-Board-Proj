@@ -11,6 +11,11 @@ function toolboxReducer(state, action) {
       newState[action.payload.tool].stroke = action.payload.stroke;
       return newState;
     }
+    case TOOLBOX_ACTIONS.CHANGE_SIZE: {
+      const newState = { ...state };
+      newState[action.payload.tool].size = action.payload.size;
+      return newState;
+    }
     case TOOLBOX_ACTIONS.CHANGE_FILL: {
       const newState = { ...state };
       newState[action.payload.tool].fill = action.payload.fill;
@@ -59,6 +64,15 @@ const ToolboxProvider = ({ children }) => {
       type: TOOLBOX_ACTIONS.CHANGE_FILL,
       payload: {
         fill: fill,
+        tool: tool,
+      },
+    });
+  };
+  const changeSizeHandler = (tool, size) => {
+    dispatchToolboxAction({
+      type: TOOLBOX_ACTIONS.CHANGE_FILL,
+      payload: {
+        size: size,
         tool: tool,
       },
     });

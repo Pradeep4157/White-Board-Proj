@@ -8,7 +8,7 @@ export const createRoughElement = (
   y1,
   x2,
   y2,
-  { type, stroke, fill },
+  { type, stroke, fill, size },
 ) => {
   const element = {
     id,
@@ -22,6 +22,7 @@ export const createRoughElement = (
   };
   let options = {
     seed: id + 1,
+    fillStyle: "solid",
   };
   if (stroke) {
     console.log(stroke);
@@ -29,6 +30,9 @@ export const createRoughElement = (
   }
   if (fill) {
     options.fill = fill;
+  }
+  if (size) {
+    options.strokeWidth = size;
   }
   switch (type) {
     case TOOL_ITEMS.LINE: {

@@ -1,3 +1,4 @@
+/*26:34 */
 import boardContext from "./board-context.js";
 import { useReducer } from "react";
 
@@ -14,11 +15,12 @@ const boardReducer = (state, action) => {
       };
     }
     case "DRAW_DOWN": {
-      const { id, x1, y1, x2, y2, stroke, fill } = action.payload;
+      const { id, x1, y1, x2, y2, stroke, fill, size } = action.payload;
       const newElement = createRoughElement(id, x1, y1, x2, y2, {
         type: state.activeToolItem,
         stroke: stroke,
         fill: fill,
+        size: size,
       });
       return {
         ...state,
@@ -96,6 +98,7 @@ const BoardProvider = ({ children }) => {
         y2: clientY,
         stroke: toolboxState[boardState.activeToolItem]?.stroke,
         fill: toolboxState[boardState.activeToolItem]?.fill,
+        size: toolboxState[boardState.activeToolItem]?.size,
       },
     });
   };
