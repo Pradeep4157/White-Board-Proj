@@ -44,6 +44,10 @@ const initialToolboxState = {
     stroke: COLORS.BLACK,
     size: 1,
   },
+  [TOOL_ITEMS.BRUSH]: {
+    stroke: COLORS.BLACK,
+    size: 1,
+  },
 };
 const ToolboxProvider = ({ children }) => {
   const [toolboxState, dispatchToolboxAction] = useReducer(
@@ -70,7 +74,7 @@ const ToolboxProvider = ({ children }) => {
   };
   const changeSizeHandler = (tool, size) => {
     dispatchToolboxAction({
-      type: TOOLBOX_ACTIONS.CHANGE_FILL,
+      type: TOOLBOX_ACTIONS.CHANGE_SIZE,
       payload: {
         size: size,
         tool: tool,
@@ -81,6 +85,7 @@ const ToolboxProvider = ({ children }) => {
     toolboxState,
     changeStroke: changeStrokeHandler,
     changeFill: changeFillHandler,
+    changeSize: changeSizeHandler,
   };
   return (
     <toolboxContext.Provider value={toolboxContextValue}>

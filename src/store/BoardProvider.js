@@ -4,6 +4,8 @@ import { useReducer } from "react";
 
 import { TOOL_ITEMS, TOOL_ACTION_TYPES } from "../constants.js";
 import { createRoughElement } from "../utils/elements.js";
+import { getSvgPathFromStroke } from "../utils/elements.js";
+import { getStroke } from "perfect-freehand";
 
 const boardReducer = (state, action) => {
   switch (action.type) {
@@ -35,42 +37,115 @@ const boardReducer = (state, action) => {
       };
     }
     case "DRAW_MOVE": {
-      if (
-        state.elements.length === 0 ||
-        state.toolActionType !== TOOL_ACTION_TYPES.DRAWING
-      ) {
-        return state;
-      }
+      // if (
+      //   state.elements.length === 0 ||
+      //   state.toolActionType !== TOOL_ACTION_TYPES.DRAWING
+      // ) {
+      //   return state;
+      // }
       const { clientX, clientY } = action.payload;
-      const newElements = [...state.elements];
+
       const index = state.elements.length - 1;
-      newElements[index].x2 = clientX;
-      newElements[index].y2 = clientY;
-      // newElements[index].roughEle = gen.line(
-      //   newElements[index].x1,
-      //   newElements[index].y1,
-      //   clientX,
-      //   clientY,
-      // );
-      newElements[index] = createRoughElement(
-        index,
-        newElements[index].x1,
-        newElements[index].y1,
-        clientX,
-        clientY,
-        {
-          type: state.activeToolItem,
-          stroke: newElements[index].stroke,
-          fill: newElements[index].fill,
-        },
-      );
-      return {
-        ...state,
-        elements: newElements,
-      };
+      const newElements = [...state.elements];
+      const { type } = newElements[index];
+
+      switch (type) {
+        case TOOL_ITEMS.LINE:
+          newElements[index].x2 = clientX;
+          newElements[index].y2 = clientY;
+          newElements[index] = createRoughElement(
+            index,
+            newElements[index].x1,
+            newElements[index].y1,
+            clientX,
+            clientY,
+            {
+              type: state.activeToolItem,
+              stroke: newElements[index].stroke,
+              fill: newElements[index].fill,
+              size: newElements[index].size,
+            },
+          );
+          return {
+            ...state,
+            elements: newElements,
+          };
+        case TOOL_ITEMS.RECTANGLE:
+          newElements[index].x2 = clientX;
+          newElements[index].y2 = clientY;
+          newElements[index] = createRoughElement(
+            index,
+            newElements[index].x1,
+            newElements[index].y1,
+            clientX,
+            clientY,
+            {
+              type: state.activeToolItem,
+              stroke: newElements[index].stroke,
+              fill: newElements[index].fill,
+              size: newElements[index].size,
+            },
+          );
+          return {
+            ...state,
+            elements: newElements,
+          };
+        case TOOL_ITEMS.CIRCLE:
+          newElements[index].x2 = clientX;
+          newElements[index].y2 = clientY;
+          newElements[index] = createRoughElement(
+            index,
+            newElements[index].x1,
+            newElements[index].y1,
+            clientX,
+            clientY,
+            {
+              type: state.activeToolItem,
+              stroke: newElements[index].stroke,
+              fill: newElements[index].fill,
+              size: newElements[index].size,
+            },
+          );
+          return {
+            ...state,
+            elements: newElements,
+          };
+        case TOOL_ITEMS.ARROW:
+          newElements[index].x2 = clientX;
+          newElements[index].y2 = clientY;
+          newElements[index] = createRoughElement(
+            index,
+            newElements[index].x1,
+            newElements[index].y1,
+            clientX,
+            clientY,
+            {
+              type: state.activeToolItem,
+              stroke: newElements[index].stroke,
+              fill: newElements[index].fill,
+              size: newElements[index].size,
+            },
+          );
+          return {
+            ...state,
+            elements: newElements,
+          };
+        case TOOL_ITEMS.BRUSH:
+          newElements[index].points = [
+            ...newElements[index].points,
+            { x: clientX, y: clientY },
+          ];
+          newElements[index].path = new Path2D(
+            getSvgPathFromStroke(getStroke(newElements[index].points)),
+          );
+          return { ...state, elements: newElements };
+
+        default:
+          break;
+      }
     }
     default:
-      return state;
+      throw new Error("Type not recognized");
   }
 };
 const initialBoardState = {

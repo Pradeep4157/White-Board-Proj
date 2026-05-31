@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import classes from "./index.module.css";
 import cx from "classnames";
 import { useContext } from "react";
@@ -60,6 +59,16 @@ const Toolbar = () => {
         }}
       >
         <FaArrowRight />
+      </div>
+      <div
+        className={cx(classes.toolItem, {
+          [classes.active]: activeToolItem === TOOL_ITEMS.BRUSH,
+        })}
+        onClick={() => {
+          changeToolHandler("BRUSH");
+        }}
+      >
+        <FaPaintBrush />
       </div>
     </div>
   );
