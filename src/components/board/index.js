@@ -53,7 +53,7 @@ function Board() {
   };
   const handleMouseMove = (event) => {
     if (toolActionType === TOOL_ACTION_TYPES.DRAWING)
-      boardMouseMoveHandler(event);
+      boardMouseMoveHandler(event); 
   };
   const handleMouseUp = () => {
     boardMouseUpHandler();

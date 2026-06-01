@@ -5,8 +5,9 @@ import { useReducer } from "react";
 import { TOOL_ITEMS, TOOL_ACTION_TYPES } from "../constants.js";
 import { createRoughElement } from "../utils/elements.js";
 import { getSvgPathFromStroke } from "../utils/elements.js";
+import { BOARD_ACTIONS } from "../constants.js";
 import { getStroke } from "perfect-freehand";
-
+import { isPointNearElement } from "../utils/elements.js";
 const boardReducer = (state, action) => {
   switch (action.type) {
     case "CHANGE_TOOL": {
@@ -26,7 +27,10 @@ const boardReducer = (state, action) => {
       });
       return {
         ...state,
-        toolActionType: TOOL_ACTION_TYPES.DRAWING,
+        toolActionType:
+          state.activeToolItem === TOOL_ITEMS.ERASER
+            ? TOOL_ACTION_TYPES.ERASING
+            : TOOL_ACTION_TYPES.DRAWING,
         elements: [...state.elements, newElement],
       };
     }
@@ -35,6 +39,14 @@ const boardReducer = (state, action) => {
         ...state,
         toolActionType: TOOL_ACTION_TYPES.NONE,
       };
+    }
+    case BOARD_ACTIONS.ERASE: {
+      const { clientX, clientY } = action.payload;
+      let newElements = [...state.elements];
+      newElements.filter((element) => {
+        return !isPointNearElement(element, clientX, clientY);
+      });
+      return { ...state, elements: newElements };
     }
     case "DRAW_MOVE": {
       // if (
@@ -184,13 +196,23 @@ const BoardProvider = ({ children }) => {
   };
   const boardMouseMoveHandler = (event) => {
     const { clientX, clientY } = event;
-    dispatchBoardAction({
-      type: "DRAW_MOVE",
-      payload: {
-        clientX,
-        clientY,
-      },
-    });
+    if (boardState.toolActionType === TOOL_ACTION_TYPES.DRAWING) {
+      dispatchBoardAction({
+        type: "DRAW_MOVE",
+        payload: {
+          clientX,
+          clientY,
+        },
+      });
+    } else if (boardState.toolActionType === TOOL_ACTION_TYPES.ERASING) {
+      dispatchBoardAction({
+        type: "ERASE",
+        payload: {
+          clientX,
+          clientY,
+        },
+      });
+    }
   };
 
   const changeToolHandler = (tool) => {

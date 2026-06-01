@@ -70,6 +70,16 @@ const Toolbar = () => {
       >
         <FaPaintBrush />
       </div>
+      <div
+        className={cx(classes.toolItem, {
+          [classes.active]: activeToolItem === TOOL_ITEMS.ERASER,
+        })}
+        onClick={() => {
+          changeToolHandler("ERASER");
+        }}
+      >
+        <FaEraser />
+      </div>
     </div>
   );
 };

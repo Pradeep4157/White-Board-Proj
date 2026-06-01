@@ -1,3 +1,4 @@
+/*13:10 */
 import { TOOL_ITEMS } from "../constants.js";
 import { getArrowHeadCoordinates } from "../utils/math.js";
 import { getStroke } from "perfect-freehand";
@@ -82,6 +83,9 @@ export const createRoughElement = (
       throw new Error("Type is not recognized");
     }
   }
+};
+export const isPointNearElement = (element, pointX, pointY) => {
+  return false;
 };
 export const getSvgPathFromStroke = (stroke) => {
   if (!stroke.length) return "";
