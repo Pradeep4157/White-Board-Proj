@@ -17,6 +17,12 @@ const boardReducer = (state, action) => {
         activeToolItem: action.payload.tool,
       };
     }
+    case BOARD_ACTIONS.CHANGE_ACTION_TYPE: {
+      return {
+        ...state,
+        toolActionType: action.payload.actionType,
+      };
+    }
     case "DRAW_DOWN": {
       const { id, x1, y1, x2, y2, stroke, fill, size } = action.payload;
       const newElement = createRoughElement(id, x1, y1, x2, y2, {
@@ -27,23 +33,13 @@ const boardReducer = (state, action) => {
       });
       return {
         ...state,
-        toolActionType:
-          state.activeToolItem === TOOL_ITEMS.ERASER
-            ? TOOL_ACTION_TYPES.ERASING
-            : TOOL_ACTION_TYPES.DRAWING,
+        toolActionType: TOOL_ACTION_TYPES.DRAWING,
         elements: [...state.elements, newElement],
-      };
-    }
-    case "DRAW_UP": {
-      return {
-        ...state,
-        toolActionType: TOOL_ACTION_TYPES.NONE,
       };
     }
     case BOARD_ACTIONS.ERASE: {
       const { clientX, clientY } = action.payload;
-      let newElements = [...state.elements];
-      newElements.filter((element) => {
+      const newElements = [...state.elements].filter((element) => {
         return !isPointNearElement(element, clientX, clientY);
       });
       return { ...state, elements: newElements };
@@ -174,6 +170,15 @@ const BoardProvider = ({ children }) => {
 
   const boardMouseDownHandler = (event, toolboxState) => {
     const { clientX, clientY } = event;
+    if (boardState.activeToolItem === TOOL_ITEMS.ERASER) {
+      dispatchBoardAction({
+        type: BOARD_ACTIONS.CHANGE_ACTION_TYPE,
+        payload: {
+          actionType: TOOL_ACTION_TYPES.ERASING,
+        },
+      });
+      return;
+    }
 
     dispatchBoardAction({
       type: "DRAW_DOWN",
@@ -191,7 +196,10 @@ const BoardProvider = ({ children }) => {
   };
   const boardMouseUpHandler = () => {
     dispatchBoardAction({
-      type: "DRAW_UP",
+      type: BOARD_ACTIONS.CHANGE_ACTION_TYPE,
+      payload: {
+        action: TOOL_ACTION_TYPES.NONE,
+      },
     });
   };
   const boardMouseMoveHandler = (event) => {

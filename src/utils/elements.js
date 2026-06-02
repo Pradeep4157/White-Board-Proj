@@ -79,6 +79,7 @@ export const createRoughElement = (
       );
       return element;
     }
+
     default: {
       throw new Error("Type is not recognized");
     }
