@@ -1,6 +1,6 @@
 /*13:10 */
 import { TOOL_ITEMS } from "../constants.js";
-import { getArrowHeadCoordinates } from "../utils/math.js";
+import { getArrowHeadCoordinates, isPointCloseToLine } from "../utils/math.js";
 import { getStroke } from "perfect-freehand";
 import rough from "roughjs";
 const gen = rough.generator();
@@ -86,7 +86,52 @@ export const createRoughElement = (
   }
 };
 export const isPointNearElement = (element, pointX, pointY) => {
-  return false;
+  const { x1, y1, x2, y2, type } = element;
+
+  switch (type) {
+    case TOOL_ITEMS.LINE:
+    case TOOL_ITEMS.ARROW:
+      return isPointCloseToLine(x1, y1, x2, y2, pointX, pointY);
+    case TOOL_ITEMS.RECTANGLE:
+    case TOOL_ITEMS.CIRCLE:
+      return (
+        isPointCloseToLine(x1, y1, x2, y1, pointX, pointY) ||
+        isPointCloseToLine(x2, y1, x2, y2, pointX, pointY) ||
+        isPointCloseToLine(x2, y2, x1, y2, pointX, pointY) ||
+        isPointCloseToLine(x1, y2, x1, y1, pointX, pointY)
+      );
+    case TOOL_ITEMS.BRUSH:
+      const context = document.getElementById("canvas").getContext("2d");
+      return context.isPointInPath(element.path, pointX, pointY);
+    case TOOL_ITEMS.TEXT:
+      context.font = `${element.size}px Caveat`;
+      context.fillStyle = element.stroke;
+      const textWidth = context.measureText(element.text).width;
+      const textHeight = parseInt(element.size);
+      context.restore();
+      return (
+        isPointCloseToLine(x1, y1, x1 + textWidth, y1, pointX, pointY) ||
+        isPointCloseToLine(
+          x1 + textWidth,
+          y1,
+          x1 + textWidth,
+          y1 + textHeight,
+          pointX,
+          pointY,
+        ) ||
+        isPointCloseToLine(
+          x1 + textWidth,
+          y1 + textHeight,
+          x1,
+          y1 + textHeight,
+          pointX,
+          pointY,
+        ) ||
+        isPointCloseToLine(x1, y1 + textHeight, x1, y1, pointX, pointY)
+      );
+    default:
+      throw new Error("Type not recognized");
+  }
 };
 export const getSvgPathFromStroke = (stroke) => {
   if (!stroke.length) return "";

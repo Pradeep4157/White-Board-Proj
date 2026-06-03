@@ -52,14 +52,15 @@ function Board() {
     boardMouseDownHandler(event, toolboxState);
   };
   const handleMouseMove = (event) => {
-    if (toolActionType === TOOL_ACTION_TYPES.DRAWING)
-      boardMouseMoveHandler(event); 
+    console.log(event);
+    boardMouseMoveHandler(event);
   };
   const handleMouseUp = () => {
     boardMouseUpHandler();
   };
   return (
     <canvas
+      id="canvas"
       ref={canvasRef}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
