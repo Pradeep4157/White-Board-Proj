@@ -59,13 +59,18 @@ function Board() {
     boardMouseUpHandler();
   };
   return (
-    <canvas
-      id="canvas"
-      ref={canvasRef}
-      onMouseDown={handleMouseDown}
-      onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}
-    ></canvas>
+    <>
+      {toolActionType === TOOL_ACTION_TYPES.WRITING && (
+        <textarea type="text"></textarea>
+      )}
+      <canvas
+        id="canvas"
+        ref={canvasRef}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+      ></canvas>
+    </>
   );
 }
 export default Board;

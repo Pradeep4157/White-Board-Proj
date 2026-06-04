@@ -1,4 +1,4 @@
-/*13:10 */
+/*10:00 */
 import { TOOL_ITEMS } from "../constants.js";
 import { getArrowHeadCoordinates, isPointCloseToLine } from "../utils/math.js";
 import { getStroke } from "perfect-freehand";
@@ -47,6 +47,8 @@ export const createRoughElement = (
         stroke,
       };
       return brushElement;
+    }
+    case TOOL_ITEMS.TEXT: {
     }
     case TOOL_ITEMS.LINE: {
       // console.log(size);
@@ -103,6 +105,7 @@ export const isPointNearElement = (element, pointX, pointY) => {
     case TOOL_ITEMS.BRUSH:
       const context = document.getElementById("canvas").getContext("2d");
       return context.isPointInPath(element.path, pointX, pointY);
+
     case TOOL_ITEMS.TEXT:
       context.font = `${element.size}px Caveat`;
       context.fillStyle = element.stroke;

@@ -80,6 +80,16 @@ const Toolbar = () => {
       >
         <FaEraser />
       </div>
+      <div
+        className={cx(classes.toolItem, {
+          [classes.active]: activeToolItem === TOOL_ITEMS.TEXT,
+        })}
+        onClick={() => {
+          changeToolHandler("TEXT");
+        }}
+      >
+        <FaFont />
+      </div>
     </div>
   );
 };

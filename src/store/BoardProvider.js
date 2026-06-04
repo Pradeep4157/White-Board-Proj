@@ -169,6 +169,15 @@ const BoardProvider = ({ children }) => {
   );
 
   const boardMouseDownHandler = (event, toolboxState) => {
+    // if (boardState.activeToolItem === TOOL_ITEMS.TEXT) {
+    //   dispatchBoardAction({
+    //     type: BOARD_ACTIONS.CHANGE_ACTION_TYPE,
+    //     payload: {
+    //       actionType: TOOL_ACTION_TYPES.WRITING,
+    //     },
+    //   });
+    //   return;
+    // }
     const { clientX, clientY } = event;
     if (boardState.activeToolItem === TOOL_ITEMS.ERASER) {
       dispatchBoardAction({
@@ -184,8 +193,8 @@ const BoardProvider = ({ children }) => {
       type: "DRAW_DOWN",
       payload: {
         id: Date.now(),
-        x1: clientX,
-        y1: clientY,
+        clientX: clientX,
+        clientY: clientY,
         x2: clientX,
         y2: clientY,
         stroke: toolboxState[boardState.activeToolItem]?.stroke,
