@@ -49,6 +49,8 @@ export const createRoughElement = (
       return brushElement;
     }
     case TOOL_ITEMS.TEXT: {
+      element.text = "";
+      return element;
     }
     case TOOL_ITEMS.LINE: {
       // console.log(size);

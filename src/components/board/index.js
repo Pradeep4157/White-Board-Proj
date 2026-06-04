@@ -61,7 +61,16 @@ function Board() {
   return (
     <>
       {toolActionType === TOOL_ACTION_TYPES.WRITING && (
-        <textarea type="text"></textarea>
+        <textarea
+          type="text"
+          style={{
+            top: elements[elements.length - 1].y1,
+            left: elements[elements.length - 1].x1,
+            fontSize: `${elements[elements.length - 1].textEle?.size}px`,
+            color: elements[elements.length - 1].textEle?.stroke,
+          }}
+          // onBlur = {(event) => textAreaBlur(event.target.value)}
+        ></textarea>
       )}
       <canvas
         id="canvas"

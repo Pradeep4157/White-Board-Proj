@@ -1,4 +1,4 @@
-/*26:34 */
+/*18:44 */
 import boardContext from "./board-context.js";
 import { useReducer } from "react";
 
@@ -33,7 +33,10 @@ const boardReducer = (state, action) => {
       });
       return {
         ...state,
-        toolActionType: TOOL_ACTION_TYPES.DRAWING,
+        toolActionType:
+          state.activeToolItem === TOOL_ITEMS.TEXT
+            ? TOOL_ACTION_TYPES.WRITING
+            : TOOL_ACTION_TYPES.DRAWING,
         elements: [...state.elements, newElement],
       };
     }
