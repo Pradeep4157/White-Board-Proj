@@ -1,9 +1,9 @@
-/*18:44 */
+/*26:34 */
 import boardContext from "./board-context.js";
 import { useReducer } from "react";
 
 import { TOOL_ITEMS, TOOL_ACTION_TYPES } from "../constants.js";
-import { createRoughElement } from "../utils/elements.js";
+import { createElement } from "../utils/elements.js";
 import { getSvgPathFromStroke } from "../utils/elements.js";
 import { BOARD_ACTIONS } from "../constants.js";
 import { getStroke } from "perfect-freehand";
@@ -25,7 +25,8 @@ const boardReducer = (state, action) => {
     }
     case "DRAW_DOWN": {
       const { id, x1, y1, x2, y2, stroke, fill, size } = action.payload;
-      const newElement = createRoughElement(id, x1, y1, x2, y2, {
+
+      const newElement = createElement(id, x1, y1, x2, y2, {
         type: state.activeToolItem,
         stroke: stroke,
         fill: fill,
@@ -64,7 +65,7 @@ const boardReducer = (state, action) => {
         case TOOL_ITEMS.LINE:
           newElements[index].x2 = clientX;
           newElements[index].y2 = clientY;
-          newElements[index] = createRoughElement(
+          newElements[index] = createElement(
             index,
             newElements[index].x1,
             newElements[index].y1,
@@ -84,7 +85,7 @@ const boardReducer = (state, action) => {
         case TOOL_ITEMS.RECTANGLE:
           newElements[index].x2 = clientX;
           newElements[index].y2 = clientY;
-          newElements[index] = createRoughElement(
+          newElements[index] = createElement(
             index,
             newElements[index].x1,
             newElements[index].y1,
@@ -104,7 +105,7 @@ const boardReducer = (state, action) => {
         case TOOL_ITEMS.CIRCLE:
           newElements[index].x2 = clientX;
           newElements[index].y2 = clientY;
-          newElements[index] = createRoughElement(
+          newElements[index] = createElement(
             index,
             newElements[index].x1,
             newElements[index].y1,
@@ -124,7 +125,7 @@ const boardReducer = (state, action) => {
         case TOOL_ITEMS.ARROW:
           newElements[index].x2 = clientX;
           newElements[index].y2 = clientY;
-          newElements[index] = createRoughElement(
+          newElements[index] = createElement(
             index,
             newElements[index].x1,
             newElements[index].y1,
@@ -183,6 +184,7 @@ const BoardProvider = ({ children }) => {
     // }
     const { clientX, clientY } = event;
     if (boardState.activeToolItem === TOOL_ITEMS.ERASER) {
+      console.log(clientX, clientY);
       dispatchBoardAction({
         type: BOARD_ACTIONS.CHANGE_ACTION_TYPE,
         payload: {
@@ -196,8 +198,8 @@ const BoardProvider = ({ children }) => {
       type: "DRAW_DOWN",
       payload: {
         id: Date.now(),
-        clientX: clientX,
-        clientY: clientY,
+        x1: clientX,
+        y1: clientY,
         x2: clientX,
         y2: clientY,
         stroke: toolboxState[boardState.activeToolItem]?.stroke,
@@ -207,16 +209,19 @@ const BoardProvider = ({ children }) => {
     });
   };
   const boardMouseUpHandler = () => {
+    if (boardState.activeToolItem === TOOL_ACTION_TYPES.WRITING) return;
     dispatchBoardAction({
       type: BOARD_ACTIONS.CHANGE_ACTION_TYPE,
       payload: {
-        action: TOOL_ACTION_TYPES.NONE,
+        actionType: TOOL_ACTION_TYPES.NONE,
       },
     });
   };
   const boardMouseMoveHandler = (event) => {
+    if (boardState.toolActionType === TOOL_ACTION_TYPES.WRITING) return;
     const { clientX, clientY } = event;
     if (boardState.toolActionType === TOOL_ACTION_TYPES.DRAWING) {
+      console.log(clientX, clientY);
       dispatchBoardAction({
         type: "DRAW_MOVE",
         payload: {

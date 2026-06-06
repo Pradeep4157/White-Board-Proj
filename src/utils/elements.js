@@ -4,7 +4,7 @@ import { getArrowHeadCoordinates, isPointCloseToLine } from "../utils/math.js";
 import { getStroke } from "perfect-freehand";
 import rough from "roughjs";
 const gen = rough.generator();
-export const createRoughElement = (
+export const createElement = (
   id,
   x1,
   y1,
