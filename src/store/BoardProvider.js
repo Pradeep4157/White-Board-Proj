@@ -157,7 +157,7 @@ const boardReducer = (state, action) => {
       }
     }
     default:
-      throw new Error("Type not recognized");
+      throw new Error("error in boardReducer");
   }
 };
 const initialBoardState = {
@@ -184,7 +184,6 @@ const BoardProvider = ({ children }) => {
     // }
     const { clientX, clientY } = event;
     if (boardState.activeToolItem === TOOL_ITEMS.ERASER) {
-      console.log(clientX, clientY);
       dispatchBoardAction({
         type: BOARD_ACTIONS.CHANGE_ACTION_TYPE,
         payload: {
@@ -209,7 +208,10 @@ const BoardProvider = ({ children }) => {
     });
   };
   const boardMouseUpHandler = () => {
-    if (boardState.activeToolItem === TOOL_ACTION_TYPES.WRITING) return;
+    console.log("mouseup");
+    console.log(boardState.activeToolItem);
+    console.log(boardState.toolActionType);
+    if (boardState.toolActionType === TOOL_ACTION_TYPES.WRITING) return;
     dispatchBoardAction({
       type: BOARD_ACTIONS.CHANGE_ACTION_TYPE,
       payload: {
@@ -221,7 +223,6 @@ const BoardProvider = ({ children }) => {
     if (boardState.toolActionType === TOOL_ACTION_TYPES.WRITING) return;
     const { clientX, clientY } = event;
     if (boardState.toolActionType === TOOL_ACTION_TYPES.DRAWING) {
-      console.log(clientX, clientY);
       dispatchBoardAction({
         type: "DRAW_MOVE",
         payload: {

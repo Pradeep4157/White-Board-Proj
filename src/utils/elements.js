@@ -28,7 +28,6 @@ export const createElement = (
     fillStyle: "solid",
   };
   if (stroke) {
-    console.log(stroke);
     options.stroke = stroke;
   }
   if (fill) {
@@ -53,7 +52,6 @@ export const createElement = (
       return element;
     }
     case TOOL_ITEMS.LINE: {
-      // console.log(size);
       element.roughEle = gen.line(x1, y1, x2, y2, options);
       return element;
     }
