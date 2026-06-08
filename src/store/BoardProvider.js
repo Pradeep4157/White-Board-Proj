@@ -25,7 +25,6 @@ const boardReducer = (state, action) => {
     }
     case "DRAW_DOWN": {
       const { id, x1, y1, x2, y2, stroke, fill, size } = action.payload;
-
       const newElement = createElement(id, x1, y1, x2, y2, {
         type: state.activeToolItem,
         stroke: stroke,
@@ -155,7 +154,19 @@ const boardReducer = (state, action) => {
         default:
           break;
       }
+      break;
     }
+    case BOARD_ACTIONS.CHANGE_TEXT: {
+      const index = state.elements.length - 1;
+      const newElements = [...state.elements];
+      newElements[index].text = action.payload.text;
+      return {
+        ...state,
+        toolActionType: TOOL_ACTION_TYPES.NONE,
+        elements: newElements,
+      };
+    }
+
     default:
       throw new Error("error in boardReducer");
   }
@@ -182,6 +193,7 @@ const BoardProvider = ({ children }) => {
     //   });
     //   return;
     // }
+    if (boardState.toolActionType === TOOL_ACTION_TYPES.WRITING) return;
     const { clientX, clientY } = event;
     if (boardState.activeToolItem === TOOL_ITEMS.ERASER) {
       dispatchBoardAction({
@@ -249,7 +261,14 @@ const BoardProvider = ({ children }) => {
       },
     });
   };
-
+  const textAreaBlurHandler = (text) => {
+    dispatchBoardAction({
+      type: BOARD_ACTIONS.CHANGE_TEXT,
+      payload: {
+        text,
+      },
+    });
+  };
   const BoardContextValue = {
     activeToolItem: boardState.activeToolItem,
     changeToolHandler,
@@ -257,6 +276,7 @@ const BoardProvider = ({ children }) => {
     boardMouseDownHandler,
     boardMouseMoveHandler,
     boardMouseUpHandler,
+    textAreaBlurHandler,
     toolActionType: boardState.toolActionType,
   };
   return (

@@ -14,6 +14,7 @@ function Board() {
     boardMouseDownHandler,
     boardMouseMoveHandler,
     boardMouseUpHandler,
+    textAreaBlurHandler,
     toolActionType,
   } = useContext(boardContext);
   const { toolboxState } = useContext(toolboxContext);
@@ -37,6 +38,11 @@ function Board() {
           context.restore();
           break;
         case TOOL_ITEMS.TEXT:
+          context.textBaseline = "top";
+          context.font = `${element.size}px Caveat`;
+          context.fillStyle = element.stroke;
+          context.fillText(element.text, element.x1, element.y1);
+          context.restore();
           break;
         default:
           throw new Error("error in useLayoutEffect");
@@ -55,7 +61,9 @@ function Board() {
   useEffect(() => {
     const textArea = textAreaRef.current;
     if (toolActionType === TOOL_ACTION_TYPES.WRITING) {
-      textArea.focus();
+      setTimeout(() => {
+        textArea.focus();
+      }, 0);
     }
   }, [toolActionType]);
   const handleMouseDown = (event) => {
@@ -78,10 +86,10 @@ function Board() {
           style={{
             top: elements[elements.length - 1].y1,
             left: elements[elements.length - 1].x1,
-            fontSize: `${elements[elements.length - 1].textEle?.size}px`,
-            color: elements[elements.length - 1].textEle?.stroke,
+            fontSize: `${elements[elements.length - 1].size}px`,
+            color: elements[elements.length - 1].stroke,
           }}
-          // onBlur = {(event) => textAreaBlur(event.target.value)}
+          onBlur={(event) => textAreaBlurHandler(event.target.value)}
         ></textarea>
       )}
       <canvas
