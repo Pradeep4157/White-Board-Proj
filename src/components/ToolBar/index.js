@@ -16,7 +16,8 @@ import {
 } from "react-icons/fa";
 import { LuRectangleHorizontal } from "react-icons/lu";
 const Toolbar = () => {
-  const { activeToolItem, changeToolHandler } = useContext(boardContext);
+  const { activeToolItem, changeToolHandler, undo, redo } =
+    useContext(boardContext);
 
   return (
     <div className={classes.container}>
@@ -89,6 +90,12 @@ const Toolbar = () => {
         }}
       >
         <FaFont />
+      </div>
+      <div className={classes.toolItem} onClick={undo}>
+        <FaUndoAlt />
+      </div>
+      <div className={classes.toolItem} onClick={redo}>
+        <FaRedoAlt />
       </div>
     </div>
   );

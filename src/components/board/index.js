@@ -67,7 +67,6 @@ function Board() {
     }
   }, [toolActionType]);
   const handleMouseDown = (event) => {
-    console.log("calling mouse down...");
     boardMouseDownHandler(event, toolboxState);
   };
   const handleMouseMove = (event) => {

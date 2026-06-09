@@ -1,6 +1,3 @@
-/*
-      18:57
-*/
 import toolboxContext from "./toolbox-context";
 import { useReducer } from "react";
 import { TOOL_ITEMS, COLORS, TOOLBOX_ACTIONS } from "../constants";
