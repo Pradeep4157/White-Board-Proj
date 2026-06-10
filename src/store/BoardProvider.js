@@ -26,6 +26,7 @@ const boardReducer = (state, action) => {
     case "DRAW_DOWN": {
       const { id, x1, y1, x2, y2, stroke, fill, size } = action.payload;
       const newElement = createElement(id, x1, y1, x2, y2, {
+        id: id,
         type: state.activeToolItem,
         stroke: stroke,
         fill: fill,

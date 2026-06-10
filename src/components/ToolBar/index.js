@@ -18,6 +18,14 @@ import { LuRectangleHorizontal } from "react-icons/lu";
 const Toolbar = () => {
   const { activeToolItem, changeToolHandler, undo, redo } =
     useContext(boardContext);
+  const handleDownloadClick = () => {
+    const canvas = document.getElementById("canvas");
+    const data = canvas.toDataURL("image/png");
+    const anchor = document.createElement("a");
+    anchor.href = data;
+    anchor.download = "board.png";
+    anchor.click();
+  };
 
   return (
     <div className={classes.container}>
@@ -96,6 +104,14 @@ const Toolbar = () => {
       </div>
       <div className={classes.toolItem} onClick={redo}>
         <FaRedoAlt />
+      </div>
+      <div
+        className={cx(classes.toolItem, {
+          [classes.active]: activeToolItem === TOOL_ITEMS.TEXT,
+        })}
+        onClick={handleDownloadClick}
+      >
+        <FaDownload />
       </div>
     </div>
   );

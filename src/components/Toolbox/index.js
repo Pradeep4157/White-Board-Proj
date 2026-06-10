@@ -4,6 +4,7 @@ import {
   FILL_TOOL_TYPES,
   SIZE_TOOL_TYPES,
   TOOL_ITEMS,
+  STROKE_TOOL_TYPES,
 } from "../../constants.js";
 import { useContext } from "react";
 import boardContext from "../../store/board-context.js";
@@ -20,28 +21,59 @@ const Toolbox = () => {
 
   return (
     <div className={classes.container}>
-      <div className={classes.selectOptionContainer}>
-        <div className={classes.toolBoxLabel}>Stroke Color</div>
-        <div className={classes.colorsContainer}>
-          {Object.keys(COLORS).map((color) => {
-            return (
-              <div
-                className={cx(classes.colorBox, {
-                  [classes.activeColorBox]: strokeColor === COLORS[color],
-                })}
-                style={{ backgroundColor: color }}
-                onClick={() => {
-                  changeStroke(activeToolItem, COLORS[color]);
-                }}
-              ></div>
-            );
-          })}
+      {STROKE_TOOL_TYPES.includes(activeToolItem) && (
+        <div className={classes.selectOptionContainer}>
+          <div className={classes.toolBoxLabel}>Stroke Color</div>
+          <div className={classes.colorsContainer}>
+            <div>
+              <input
+                className={classes.colorPicker}
+                type="color"
+                value={strokeColor}
+                onChange={(e) => changeStroke(activeToolItem, e.target.value)}
+              ></input>
+            </div>
+            {Object.keys(COLORS).map((color) => {
+              return (
+                <div
+                  className={cx(classes.colorBox, {
+                    [classes.activeColorBox]: strokeColor === COLORS[color],
+                  })}
+                  style={{ backgroundColor: color }}
+                  onClick={() => {
+                    changeStroke(activeToolItem, COLORS[color]);
+                  }}
+                ></div>
+              );
+            })}
+          </div>
         </div>
-      </div>
+      )}
       {FILL_TOOL_TYPES.includes(activeToolItem) && (
         <div className={classes.selectOptionContainer}>
           <div className={classes.toolBoxLabel}>Fill Color</div>
           <div className={classes.colorsContainer}>
+            {fillColor === null ? (
+              <div
+                className={cx(classes.colorPicker, classes.noFillColorBox)}
+                onClick={() => changeFill(activeToolItem, COLORS.BLACK)}
+              ></div>
+            ) : (
+              <div>
+                <input
+                  className={classes.colorPicker}
+                  type="color"
+                  value={fillColor}
+                  onChange={(e) => changeFill(activeToolItem, e.target.value)}
+                ></input>
+              </div>
+            )}
+            <div
+              className={cx(classes.colorBox, classes.noFillColorBox, {
+                [classes.activeColorBox]: fillColor === null,
+              })}
+              onClick={() => changeFill(activeToolItem, null)}
+            ></div>
             {Object.keys(COLORS).map((color) => {
               return (
                 <div
