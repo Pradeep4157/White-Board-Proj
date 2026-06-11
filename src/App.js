@@ -1,4 +1,4 @@
-import Board from "./components/board";
+import Board from "./components/Board/index.js";
 import ToolBar from "./components/ToolBar";
 import BoardProvider from "./store/BoardProvider.js";
 import ToolboxProvider from "./store/ToolboxProvider.js";
