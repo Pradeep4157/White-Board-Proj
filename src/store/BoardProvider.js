@@ -172,7 +172,6 @@ const boardReducer = (state, action) => {
         default:
           return state;
       }
-      break;
     }
     case BOARD_ACTIONS.UNDO: {
       if (state.index <= 0) return state;
