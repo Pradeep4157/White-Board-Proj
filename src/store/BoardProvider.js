@@ -317,13 +317,13 @@ const BoardProvider = ({ children }) => {
     dispatchBoardAction({
       type: BOARD_ACTIONS.UNDO,
     });
-  });
+  }, []);
 
   const boardRedoHandler = useCallback(() => {
     dispatchBoardAction({
       type: BOARD_ACTIONS.REDO,
     });
-  });
+  }, []);
   const BoardContextValue = {
     activeToolItem: boardState.activeToolItem,
     changeToolHandler,
